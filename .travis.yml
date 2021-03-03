@@ -5,6 +5,8 @@ services:
 before_install:
   - docker build -t mack031892/react-test -f ./client/Dockerfile.dev ./client
   - wget -qO- https://toolbelt.heroku.com/install.sh | sh
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - echo "$HEROKU_PASSWORD" | docker login -u "$HEROKU_USERNAME" --password-stdin registry.heroku.com
 
 script:
   - docker run mack031892/react-test npm test
@@ -15,14 +17,13 @@ after_success:
   - docker build -t mack031892/multi-nginx ./nginx
   - docker build -t mack031892/multi-worker ./worker
   # login to the docker CLI
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+
   # take those images to push them to docker-hub
   - docker push mack031892/multi-client
   - docker push mack031892/multi-server
   - docker push mack031892/multi-nginx
   - docker push mack031892/multi-worker
 
-  - echo "$HEROKU_PASSWORD" | docker login -u "$HEROKU_USERNAME" --password-stdin registry.heroku.com
   - docker tag mack031892/multi-client registry.heroku.com/$HEROKU_APP/web
 
 deploy:
