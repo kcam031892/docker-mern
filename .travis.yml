@@ -10,6 +10,7 @@ before_install:
 
 script:
   - docker run mack031892/react-test npm test
+  - heroku login -i < heroku.txt
 
 after_success:
   - docker build -t mack031892/multi-client ./client
