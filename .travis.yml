@@ -20,3 +20,10 @@ after_success:
   - docker push mack031892/multi-server
   - docker push mack031892/multi-nginx
   - docker push mack031892/multi-worker
+
+deploy:
+  provider: heroku
+  api_key: $API_KEY
+  app: docker-mern
+  on:
+    branch: main
