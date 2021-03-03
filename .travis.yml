@@ -10,7 +10,6 @@ before_install:
 
 script:
   - docker run mack031892/react-test npm test
-  - heroku authorizations:create
 
 after_success:
   - docker build -t mack031892/multi-client ./client
@@ -26,6 +25,7 @@ after_success:
   - docker push mack031892/multi-worker
 
   - docker tag mack031892/multi-client registry.heroku.com/$HEROKU_APP/web
+  - heroku authorizations:create
 
 deploy:
   provider: script
